@@ -19,7 +19,7 @@ public class AIMovement : MonoBehaviour
     private NavMeshAgent agent;
     
     [SerializeField]
-    private float baseSpeed;
+    private float baseSpeed = 10f;
 
     [SerializeField]
     private float chaseSpeedMult = 1.25f;
@@ -56,11 +56,18 @@ public class AIMovement : MonoBehaviour
 
         if (patrolPoints.Count == 0 || !followPatrol) return;
 
-
-
         if (_state == AgentState.Patrol)
         {
+            agent.speed = baseSpeed;
             FollowPatrol();
+        }
+        else if (_state == AgentState.Chase)
+        {
+
+        }
+        else if (_state == AgentState.Wander)
+        {
+
         }
     }
 
