@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
-public class AIMovement : MonoBehaviour
+public class AIBehaviour : MonoBehaviour
 {
-    enum AgentState
+    public enum AgentState
     {
         Patrol,
         Chase,
         Wander
     }
 
-    [SerializeField]
-    private AgentState _state = AgentState.Patrol;
+  
+    public AgentState _state = AgentState.Patrol;
 
     private NavMeshAgent agent;
-    
+
     [SerializeField]
-    private float baseSpeed = 10f;
+    private float baseSpeed;
 
     [SerializeField]
     private float chaseSpeedMult = 1.25f;
@@ -27,6 +28,8 @@ public class AIMovement : MonoBehaviour
     public bool followPatrol = true;
 
     public List<GameObject> patrolPoints;
+
+    public readonly float noiseRange = 40f;
 
     public GameObject targetObject;
     Vector3 targetPoint;
@@ -54,16 +57,20 @@ public class AIMovement : MonoBehaviour
             agent.SetDestination(targetObject.transform.position);
         }
 
-        if (patrolPoints.Count == 0 || !followPatrol) return;
+        if (patrolPoints.Count == 0) return;
 
         if (_state == AgentState.Patrol)
         {
+            followPatrol = true;
             agent.speed = baseSpeed;
             FollowPatrol();
         }
         else if (_state == AgentState.Chase)
         {
-
+            followPatrol = false;
+            agent.speed = baseSpeed * chaseSpeedMult;
+            ChaseTarget();
+            
         }
         else if (_state == AgentState.Wander)
         {
@@ -74,7 +81,7 @@ public class AIMovement : MonoBehaviour
     // -1 means all layers
     public static Vector3 RandomNavSphere(Vector3 origin, float distance, int layermask)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * distance;
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * distance;
 
         randomDirection += origin;
 
@@ -87,7 +94,8 @@ public class AIMovement : MonoBehaviour
 
     void FollowPatrol()
     {
-        if(targetPoint == null || Vector3.Distance(transform.position, targetPoint) < 2f)
+        // if at point
+        if(targetPoint == null || AtTarget())
         {
             if (currPatrolIndex == patrolPoints.Count - 1)
             {
@@ -101,6 +109,23 @@ public class AIMovement : MonoBehaviour
             targetPoint = patrolPoints[currPatrolIndex].transform.position;
             agent.SetDestination(targetPoint);
         }
+    }
+
+    void ChaseTarget()
+    {
+        targetPoint = targetObject.transform.position;
+
+        agent.SetDestination(targetPoint);
+        if (AtTarget())
+        {
+            // switch to wander for time
+            _state = AgentState.Patrol;
+        }
+    }
+
+    bool AtTarget()
+    {
+        return Vector3.Distance(transform.position, targetPoint) < 2f ? true : false;
     }
 
 }
