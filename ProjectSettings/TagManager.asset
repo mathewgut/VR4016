@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Noise
-  - LController
-  - RController
   layers:
   - Default
   - TransparentFX
@@ -14,8 +12,6 @@ TagManager:
   - 
   - Water
   - UI
-  - XR Hand
-  - Interactables
   - 
   - 
   - 
@@ -39,6 +35,8 @@ TagManager:
   - 
   - 
   - 
+  - 
+  - XR Simulation
   - 
   m_SortingLayers:
   - name: Default
