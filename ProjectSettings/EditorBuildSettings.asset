@@ -4,6 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
+<<<<<<< HEAD
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MatDev/AITesting.unity
+    guid: f3ca5f66c4e85e04eb674473880b5488
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bcc86df2f8a11954aa78a7483fcad714, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: dcf6cd96c7d69284e9a816ffd17a20a0, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 467b6018322832f448cc3622e47a4323, type: 2}
+=======
   m_Scenes: []
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: f2eb38105f433ac41b6c292cd7354f49, type: 2}
@@ -12,3 +23,4 @@ EditorBuildSettings:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ec000107b9f29ae48a794873227ad25a, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 73a3ec2b7c385d645b1083f2e39a1269, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 3c171662a03f53d45b15d3c1af17721f, type: 2}
+>>>>>>> ad152caa97f9e542126092bc183c3ce9bd3e96a9
