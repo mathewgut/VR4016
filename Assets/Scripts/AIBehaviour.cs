@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
+
 
 public class AIBehaviour : MonoBehaviour
 {
@@ -13,9 +11,21 @@ public class AIBehaviour : MonoBehaviour
         Chase,
         Wander
     }
+    public enum Lights
+    {
+        Chase,
+        Seen,
+        Passive
+    }
 
-  
+    [SerializeField] GameObject passiveLight;
+    [SerializeField] GameObject seenLight;
+    [SerializeField] GameObject chaseLight;
+
+    List<GameObject> lights = new List<GameObject>();
+
     public AgentState _state = AgentState.Patrol;
+    public Lights activeLight = Lights.Passive;
 
     private NavMeshAgent agent;
 
@@ -45,6 +55,13 @@ public class AIBehaviour : MonoBehaviour
             targetPoint = patrolPoints[currPatrolIndex].transform.position;
             agent.SetDestination(targetPoint);
         }
+        if(chaseLight && seenLight && passiveLight)
+        {
+            lights.Add(chaseLight);
+            lights.Add(passiveLight);
+            lights.Add(seenLight);
+        }
+        ActivateLight(passiveLight, Lights.Passive);
 
     }
 
@@ -64,17 +81,18 @@ public class AIBehaviour : MonoBehaviour
             followPatrol = true;
             agent.speed = baseSpeed;
             FollowPatrol();
+            if (activeLight != Lights.Passive) ActivateLight(passiveLight, Lights.Passive);
         }
         else if (_state == AgentState.Chase)
         {
             followPatrol = false;
             agent.speed = baseSpeed * chaseSpeedMult;
             ChaseTarget();
-            
+            if (activeLight != Lights.Chase) ActivateLight(chaseLight, Lights.Chase);
         }
         else if (_state == AgentState.Wander)
         {
-
+            
         }
     }
 
@@ -126,6 +144,17 @@ public class AIBehaviour : MonoBehaviour
     bool AtTarget()
     {
         return Vector3.Distance(transform.position, targetPoint) < 2f ? true : false;
+    }
+
+    void ActivateLight(GameObject lightRef, Lights type)
+    {
+        foreach (GameObject lightObj in lights)
+        {
+            if (lightObj == lightRef) lightObj.SetActive(true);
+            else lightObj.SetActive(false);
+        }
+
+        activeLight = type;
     }
 
 }
