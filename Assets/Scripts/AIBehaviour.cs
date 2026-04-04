@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +29,12 @@ public class AIBehaviour : MonoBehaviour
     public Lights activeLight = Lights.Passive;
 
     private NavMeshAgent agent;
+    public GameObject Player;
+    PlayerAttributes attributes;
+    GameObject playerCollider;
+
+    [SerializeField] float viewConeAngle = 130;
+    float viewDistance = 20f;
 
     [SerializeField]
     private float baseSpeed;
@@ -44,7 +51,16 @@ public class AIBehaviour : MonoBehaviour
     public GameObject targetObject;
     Vector3 targetPoint;
 
+    public bool playerVisible = false;
+
     int currPatrolIndex = 0;
+
+    float wanderStartTime = -1;
+    float wanderTime = 6;
+
+    float seenPlayerStart = -1;
+    float seenPlayerTime = 3;
+
 
     // Start is called before the first frame update
     void Start()
@@ -63,37 +79,55 @@ public class AIBehaviour : MonoBehaviour
         }
         ActivateLight(passiveLight, Lights.Passive);
 
+        Player = GameObject.FindGameObjectWithTag("Player");
+        playerCollider = GameObject.FindGameObjectWithTag("PlayerCollider");
+
+        attributes = Player.GetComponent<PlayerAttributes>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        // follow an object
-        if (targetObject != null && !followPatrol)
-        {
-            agent.SetDestination(targetObject.transform.position);
-        }
+        CheckViewCone();
 
-        if (patrolPoints.Count == 0) return;
+        // follow an object
+        bool isNoticingPlayer = seenPlayerStart != -1;
 
         if (_state == AgentState.Patrol)
         {
             followPatrol = true;
             agent.speed = baseSpeed;
-            FollowPatrol();
+            if (!isNoticingPlayer) FollowPatrol();
             if (activeLight != Lights.Passive) ActivateLight(passiveLight, Lights.Passive);
         }
         else if (_state == AgentState.Chase)
         {
             followPatrol = false;
             agent.speed = baseSpeed * chaseSpeedMult;
-            ChaseTarget();
+            ChaseTarget(); 
             if (activeLight != Lights.Chase) ActivateLight(chaseLight, Lights.Chase);
         }
         else if (_state == AgentState.Wander)
         {
-            
+
+            agent.speed = baseSpeed / 2;
+            followPatrol = false;
+            if (wanderStartTime == -1) wanderStartTime = Time.time;
+
+            if (Time.time - wanderStartTime >= wanderTime) { 
+                _state = AgentState.Patrol;
+
+                // can't null a vector3, so this makes the ai "at target", so can resume patrol
+                targetPoint = transform.position;
+            }
+            else
+            {
+                if (activeLight != Lights.Seen) ActivateLight(seenLight, Lights.Seen);
+                WanderTarget();
+            }
         }
+
     }
 
     // -1 means all layers
@@ -131,14 +165,25 @@ public class AIBehaviour : MonoBehaviour
 
     void ChaseTarget()
     {
-        targetPoint = targetObject.transform.position;
-
         agent.SetDestination(targetPoint);
-        if (AtTarget())
+
+        if (AtTarget() && !playerVisible)
         {
             // switch to wander for time
-            _state = AgentState.Patrol;
+            _state = AgentState.Wander;
         }
+    }
+
+    void WanderTarget()
+    {
+        //targetPoint = RandomNavSphere(transform.position, 7f, -1);
+
+        if (AtTarget())
+        {
+            targetPoint = RandomNavSphere(transform.position, 7f, -1);
+        }
+
+        agent.SetDestination(targetPoint);
     }
 
     bool AtTarget()
@@ -155,6 +200,60 @@ public class AIBehaviour : MonoBehaviour
         }
 
         activeLight = type;
+    }
+
+    void CheckViewCone()
+    {
+        // cone visuals
+        Debug.DrawRay(transform.position, Quaternion.AngleAxis(-viewConeAngle, Vector3.up) * transform.forward * viewDistance, Color.yellow);
+        Debug.DrawRay(transform.position, Quaternion.AngleAxis(viewConeAngle, Vector3.up) * transform.forward * viewDistance, Color.yellow);
+
+
+        Vector3 npcEyes = transform.position + Vector3.up;
+        Vector3 playerTarget = Camera.main.transform.position;
+        
+        Vector3 direction = playerTarget - npcEyes;
+        float dist = direction.magnitude;
+
+
+        Debug.DrawRay(npcEyes, direction.normalized * viewDistance, Color.green);
+
+        if (dist <= viewDistance && Vector3.Angle(transform.forward, direction) < viewConeAngle || dist < 3)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(npcEyes, direction.normalized, out hit, viewDistance))
+            {
+               
+                bool hitPlayer = hit.transform.CompareTag("PlayerCollider") ||
+                                (hit.transform.parent != null && hit.transform.parent.CompareTag("PlayerCollider"));
+
+                if (hitPlayer && !attributes.isHidden)
+                {
+                    playerVisible = true;
+                    if (seenPlayerStart == -1) seenPlayerStart = Time.time;
+
+               
+                    targetPoint = hit.point;
+
+                   
+                    if (Time.time - seenPlayerStart >= seenPlayerTime)
+                    {
+                        _state = AgentState.Chase;
+                    }
+
+                 
+                    agent.SetDestination(targetPoint);
+
+                    if (_state != AgentState.Chase) ActivateLight(seenLight, Lights.Seen);
+
+                    return; 
+                }
+            }
+        }
+
+        // Only reset if we actually lost sight
+        playerVisible = false;
+        seenPlayerStart = -1;
     }
 
 }
