@@ -80,6 +80,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 64e61d956012a5e4ab0c55ef2a0699cc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6336708577922343133}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 64e61d956012a5e4ab0c55ef2a0699cc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6777543165606869712}
   m_SourcePrefab: {fileID: 100100000, guid: 64e61d956012a5e4ab0c55ef2a0699cc, type: 3}
 --- !u!1 &6166102596320433161 stripped
 GameObject:
@@ -3604,3 +3607,16 @@ MonoBehaviour:
     - {x: 0.13058299, y: 0.052337, z: -0.99005497}
     - {x: 0.13510501, y: 0.054177, z: -0.989349}
     - {x: 0.2661139, y: 0.10748197, z: -0.9579306}
+--- !u!114 &6777543165606869712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6166102596320433161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc84223a25c5a64aa3b65acce4f7c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quackSound: {fileID: 8300000, guid: 5f3713dcde31cb24eb10d30ff1af7e60, type: 3}

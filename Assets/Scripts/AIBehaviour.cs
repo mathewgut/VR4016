@@ -62,7 +62,7 @@ public class AIBehaviour : MonoBehaviour
     float wanderTime = 6;
 
     float seenPlayerStart = -1;
-    float seenPlayerTime = 3;
+    float seenPlayerTime = 1.5f;
 
     // tracks whether the horn audio played for chase or not
     bool playedHorn = false;
@@ -202,7 +202,7 @@ public class AIBehaviour : MonoBehaviour
 
     bool AtTarget()
     {
-        return Vector3.Distance(transform.position, targetPoint) < 2f ? true : false;
+        return Vector3.Distance(transform.position, targetPoint) < 3.5f ? true : false;
     }
 
     void ActivateLight(GameObject lightRef, Lights type)

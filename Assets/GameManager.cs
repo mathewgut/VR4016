@@ -34,4 +34,8 @@ public class GameManager : MonoBehaviour
     public void IncrementCollected() {
         currCollected += 1;
     }
+
+    public int GetCurrCollected() => currCollected;
+
+    public int GetToCollect() => targetCollected;
 }
