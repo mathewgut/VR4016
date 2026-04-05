@@ -19,6 +19,9 @@ public class AIBehaviour : MonoBehaviour
         Passive
     }
 
+    [SerializeField] AudioSource hornSource;
+    [SerializeField] AudioSource chaseSource;
+
     [SerializeField] GameObject passiveLight;
     [SerializeField] GameObject seenLight;
     [SerializeField] GameObject chaseLight;
@@ -61,6 +64,9 @@ public class AIBehaviour : MonoBehaviour
     float seenPlayerStart = -1;
     float seenPlayerTime = 3;
 
+    // tracks whether the horn audio played for chase or not
+    bool playedHorn = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -91,26 +97,27 @@ public class AIBehaviour : MonoBehaviour
     {
         CheckViewCone();
 
-        // follow an object
+        // if seen timer started
         bool isNoticingPlayer = seenPlayerStart != -1;
 
         if (_state == AgentState.Patrol)
         {
+            playedHorn = false;
             followPatrol = true;
             agent.speed = baseSpeed;
             if (!isNoticingPlayer) FollowPatrol();
-            if (activeLight != Lights.Passive) ActivateLight(passiveLight, Lights.Passive);
+            if (activeLight != Lights.Passive && isNoticingPlayer) ActivateLight(passiveLight, Lights.Passive);
         }
         else if (_state == AgentState.Chase)
         {
             followPatrol = false;
-            agent.speed = baseSpeed * chaseSpeedMult;
-            ChaseTarget(); 
+            agent.speed = baseSpeed * chaseSpeedMult; 
+            ChaseTarget();
             if (activeLight != Lights.Chase) ActivateLight(chaseLight, Lights.Chase);
         }
         else if (_state == AgentState.Wander)
         {
-
+            playedHorn = false;
             agent.speed = baseSpeed / 2;
             followPatrol = false;
             if (wanderStartTime == -1) wanderStartTime = Time.time;
@@ -127,6 +134,8 @@ public class AIBehaviour : MonoBehaviour
                 WanderTarget();
             }
         }
+
+        if (_state != AgentState.Chase && chaseSource.isPlaying) chaseSource.Stop();
 
     }
 
@@ -165,11 +174,16 @@ public class AIBehaviour : MonoBehaviour
 
     void ChaseTarget()
     {
+        if (!hornSource.isPlaying && !playedHorn) { 
+            hornSource.Play();
+            chaseSource.Play();
+            playedHorn = true;
+            
+        }
         agent.SetDestination(targetPoint);
 
         if (AtTarget() && !playerVisible)
         {
-            // switch to wander for time
             _state = AgentState.Wander;
         }
     }
@@ -241,7 +255,7 @@ public class AIBehaviour : MonoBehaviour
                         _state = AgentState.Chase;
                     }
 
-                 
+
                     agent.SetDestination(targetPoint);
 
                     if (_state != AgentState.Chase) ActivateLight(seenLight, Lights.Seen);
