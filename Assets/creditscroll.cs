@@ -1,27 +1,33 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class creditscroll : MonoBehaviour
 {
     public float scrollSpeed = 20f;
     public float delay = 5f;
-    public GameObject textObject;
+    public TMP_Text textComponent;
+
+    private bool canScroll = false;
 
     private void Start()
     {
-        textObject.SetActive(false);
-
-        StartCoroutine(ShowTextAfterDelay());
+        StartCoroutine(StartScroll());
     }
 
-    private System.Collections.IEnumerator ShowTextAfterDelay()
+    private IEnumerator StartScroll()
     {
+        textComponent.enabled = false;
+
         yield return new WaitForSeconds(delay);
-        textObject.SetActive(true);
+
+        textComponent.enabled = true;
+        canScroll = true;
     }
 
     private void Update()
     {
-        if (textObject.activeSelf)
+        if (canScroll)
         {
             transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime);
         }

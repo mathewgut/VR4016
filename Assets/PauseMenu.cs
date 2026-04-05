@@ -6,7 +6,7 @@ public class PauseMenu : MonoBehaviour
     [Header("References")]
     public GameObject pauseMenuUI;
     public Transform headTransform;
-    public GameObject locomotionObject;
+    public MonoBehaviour locomotionScript;
     public InputActionReference pauseAction;
 
     [Header("Placement")]
@@ -19,7 +19,10 @@ public class PauseMenu : MonoBehaviour
     private void OnEnable()
     {
         if (pauseAction != null)
+        {
             pauseAction.action.Enable();
+            Debug.Log("Pause action enabled: " + pauseAction.action.name);
+        }
     }
 
     private void OnDisable()
@@ -32,6 +35,19 @@ public class PauseMenu : MonoBehaviour
     {
         if (pauseAction != null && pauseAction.action.WasPressedThisFrame())
         {
+            Debug.Log("Pause button pressed");
+
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
+        }
+
+        // editor test key
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            Debug.Log("Escape pressed");
+
             if (isPaused)
                 ResumeGame();
             else
@@ -41,24 +57,32 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
+        Debug.Log("PauseGame called");
         isPaused = true;
 
         PositionMenu();
-        pauseMenuUI.SetActive(true);
+
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
+
         Time.timeScale = 0f;
 
-        if (locomotionObject != null)
-            locomotionObject.SetActive(false);
+        if (locomotionScript != null)
+            locomotionScript.enabled = false;
     }
 
     public void ResumeGame()
     {
+        Debug.Log("ResumeGame called");
         isPaused = false;
-        pauseMenuUI.SetActive(false);
+
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
         Time.timeScale = 1f;
 
-        if (locomotionObject != null)
-            locomotionObject.SetActive(true);
+        if (locomotionScript != null)
+            locomotionScript.enabled = true;
     }
 
     private void PositionMenu()
@@ -82,10 +106,7 @@ public class PauseMenu : MonoBehaviour
         toPlayer.y = 0f;
 
         if (toPlayer.sqrMagnitude > 0.01f)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
-            pauseMenuUI.transform.rotation = lookRotation;
-        }
+            pauseMenuUI.transform.rotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
 
         pauseMenuUI.transform.Rotate(downwardTilt, 0f, 0f);
     }
