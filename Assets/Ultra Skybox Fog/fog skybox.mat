@@ -8,14 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fog skybox
-  m_Shader: {fileID: 4800000, guid: 5e444cd13928b274babcaedb447ba3ef, type: 3}
+  m_Shader: {fileID: 108, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _MAPPING_LATITUDE_LONGITUDE_LAYOUT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -65,11 +66,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ApertureSize: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Exposure: 1
+    - _Exposure: 3.68
+    - _FeatheringEffect: 0.302
     - _FogBottom: 0
     - _FogEnd: 0.273
     - _FogIntens: 0.865
@@ -77,9 +80,13 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _ImageType: 0
+    - _Layout: 0
+    - _Mapping: 1
     - _Metallic: 0
     - _MieIntens: 0
     - _MieSize: 0.718
+    - _MirrorOnBack: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -96,4 +103,6 @@ Material:
     - _FogCol: {r: 0.4641509, g: 0.4641509, b: 0.4641509, a: 0.5}
     - _MieTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
     - _Tint: {r: 0, g: 0, b: 0, a: 0.5}
+    - _VignetteColor: {r: 1, g: 1, b: 1, a: 1}
+    - _VignetteColorBlend: {r: 0.6150943, g: 0.6150943, b: 0.6150943, a: 1}
   m_BuildTextureStacks: []
