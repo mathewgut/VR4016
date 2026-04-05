@@ -19,7 +19,9 @@ public class VRSnapLocomotion : MonoBehaviour
     [Header("Collision")]
     public bool useCollisionCheck = true;
     public LayerMask blockingLayers;
-    public float checkRadius = 0.3f;
+    public float collisionRadius = 0.3f;
+    public float playerHeight = 1.7f;
+    public float skinWidth = 0.05f;
 
     private bool stickEngaged = false;
 
@@ -69,19 +71,74 @@ public class VRSnapLocomotion : MonoBehaviour
         if (moveDirection.sqrMagnitude < 0.01f)
             return;
 
-        Vector3 startPosition = xrOrigin.transform.position;
-        Vector3 targetPosition = startPosition + moveDirection * stepDistance;
+        Vector3 currentBodyPosition = GetBodyPosition();
+        Vector3 targetBodyPosition = currentBodyPosition + moveDirection * stepDistance;
 
         if (useCollisionCheck)
         {
-            if (!Physics.CheckSphere(targetPosition, checkRadius, blockingLayers))
-            {
-                xrOrigin.transform.position = targetPosition;
-            }
+            if (!CanMoveTo(currentBodyPosition, targetBodyPosition, moveDirection, stepDistance))
+                return;
         }
-        else
-        {
-            xrOrigin.transform.position = targetPosition;
-        }
+
+        Vector3 rigOffset = targetBodyPosition - currentBodyPosition;
+        xrOrigin.transform.position += rigOffset;
+    }
+
+    private Vector3 GetBodyPosition()
+    {
+        Vector3 bodyPosition = headTransform.position;
+        bodyPosition.y = xrOrigin.transform.position.y;
+        return bodyPosition;
+    }
+
+    private bool CanMoveTo(Vector3 startBodyPosition, Vector3 targetBodyPosition, Vector3 moveDirection, float distance)
+    {
+        Vector3 startBottom = startBodyPosition + Vector3.up * collisionRadius;
+        Vector3 startTop = startBodyPosition + Vector3.up * (playerHeight - collisionRadius);
+
+        float castDistance = distance + skinWidth;
+
+        bool hitOnPath = Physics.CapsuleCast(
+            startBottom,
+            startTop,
+            collisionRadius,
+            moveDirection,
+            castDistance,
+            blockingLayers,
+            QueryTriggerInteraction.Ignore
+        );
+
+        if (hitOnPath)
+            return false;
+
+        Vector3 targetBottom = targetBodyPosition + Vector3.up * collisionRadius;
+        Vector3 targetTop = targetBodyPosition + Vector3.up * (playerHeight - collisionRadius);
+
+        bool blockedAtDestination = Physics.CheckCapsule(
+            targetBottom,
+            targetTop,
+            collisionRadius,
+            blockingLayers,
+            QueryTriggerInteraction.Ignore
+        );
+
+        return !blockedAtDestination;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (xrOrigin == null || headTransform == null)
+            return;
+
+        Gizmos.color = Color.green;
+
+        Vector3 bodyPosition = headTransform.position;
+        bodyPosition.y = xrOrigin.transform.position.y;
+
+        Vector3 bottom = bodyPosition + Vector3.up * collisionRadius;
+        Vector3 top = bodyPosition + Vector3.up * (playerHeight - collisionRadius);
+
+        Gizmos.DrawWireSphere(bottom, collisionRadius);
+        Gizmos.DrawWireSphere(top, collisionRadius);
     }
 }
