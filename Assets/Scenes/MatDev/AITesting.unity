@@ -29348,6 +29348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc84223a25c5a64aa3b65acce4f7c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  quackSound: {fileID: 8300000, guid: 5f3713dcde31cb24eb10d30ff1af7e60, type: 3}
 --- !u!1 &1239729608
 GameObject:
   m_ObjectHideFlags: 0
@@ -34199,6 +34200,52 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1450605347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450605349}
+  - component: {fileID: 1450605348}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1450605348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450605347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd9e275524253a4b98f2ee73e0bc3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currCollected: 0
+  targetCollected: 5
+--- !u!4 &1450605349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450605347}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -51.515686, y: 17.71262, z: 16.0877}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1462985245
 GameObject:
   m_ObjectHideFlags: 0
@@ -40481,13 +40528,41 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
       propertyPath: m_HoverExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1230919857}
     - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
       propertyPath: m_HoverEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1230919857}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1230919858}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CollectDuck
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DuckyInteraction, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629978200800758182, guid: 85987694902348f46af864e1f0d329d7, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6166102596320433161, guid: 85987694902348f46af864e1f0d329d7, type: 3}
       propertyPath: m_Name
       value: Pickup_Construction_Ducky
@@ -54502,6 +54577,7 @@ MeshRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1450605349}
   - {fileID: 306155673}
   - {fileID: 1877004671}
   - {fileID: 927027138}
