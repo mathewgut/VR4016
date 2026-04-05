@@ -481,6 +481,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5093218875659544848, guid: 71b91d6030b3d814cb0ee2fd5b9ec290, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6471427086342050285}
+    - targetCorrespondingSourceObject: {fileID: 180689468283125691, guid: 71b91d6030b3d814cb0ee2fd5b9ec290, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1981201745226322376}
   m_SourcePrefab: {fileID: 100100000, guid: 71b91d6030b3d814cb0ee2fd5b9ec290, type: 3}
 --- !u!1 &2667408779573910121 stripped
 GameObject:
@@ -502,6 +505,29 @@ MonoBehaviour:
   trigger: {fileID: 484951723000178005}
   door: {fileID: 8028612345189076520}
   isPlayerHidden: 0
+--- !u!1 &3117638745824991363 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 180689468283125691, guid: 71b91d6030b3d814cb0ee2fd5b9ec290, type: 3}
+  m_PrefabInstance: {fileID: 3010062575649941304}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1981201745226322376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3117638745824991363}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784d72a2db123df48ad74e61bd2a25da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!4 &3336985404433924307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 71b91d6030b3d814cb0ee2fd5b9ec290, type: 3}
@@ -637,10 +663,34 @@ MonoBehaviour:
       m_Calls: []
   m_HoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1981201745226322376}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_HoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1981201745226322376}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstSelectEntered:
     m_PersistentCalls:
       m_Calls: []

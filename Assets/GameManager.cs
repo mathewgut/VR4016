@@ -7,6 +7,17 @@ public class GameManager : MonoBehaviour
     public int currCollected = 0;
     public int targetCollected = 5;
 
+    public enum GameState
+    {
+        Won,
+        Lost,
+        Paused,
+        Looking, // main state, means not all ducks found
+        Collected // means all ducks found, exit door has appeared
+    }
+
+    public GameState gameState = GameState.Looking;
+
     public static GameManager Instance { get; private set; }
 
    
@@ -27,7 +38,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameState == GameState.Paused || gameState == GameState.Lost) Time.timeScale = 0;
+        else Time.timeScale = 1f;
+
+        if (currCollected == targetCollected && gameState != GameState.Collected) gameState = GameState.Collected;
     }
 
 
@@ -38,4 +52,8 @@ public class GameManager : MonoBehaviour
     public int GetCurrCollected() => currCollected;
 
     public int GetToCollect() => targetCollected;
+
+    public GameState GetGameState() => gameState;
+
+    public void SetGameState(GameState state) => gameState = state;
 }
