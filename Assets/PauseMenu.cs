@@ -1,18 +1,22 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    [Header("References")]
     public GameObject pauseMenuUI;
+    public GameObject mainPage;
+    public GameObject controlsPage;
     public Transform headTransform;
-    public MonoBehaviour locomotionScript;
+    public MonoBehaviour[] playerScriptsToDisable;
+    public MonoBehaviour[] aiScriptsToDisable;
+    public NavMeshAgent[] agentsToStop;
+    public Animator[] animatorsToPause;
     public InputActionReference pauseAction;
 
-    [Header("Placement")]
     public float distanceFromPlayer = 1.8f;
     public float heightOffset = -0.15f;
-    public float downwardTilt = 8f;
 
     private bool isPaused = false;
 
@@ -21,93 +25,158 @@ public class PauseMenu : MonoBehaviour
         if (pauseAction != null)
         {
             pauseAction.action.Enable();
-            Debug.Log("Pause action enabled: " + pauseAction.action.name);
+            pauseAction.action.performed += OnPausePerformed;
         }
     }
 
     private void OnDisable()
     {
         if (pauseAction != null)
+        {
+            pauseAction.action.performed -= OnPausePerformed;
             pauseAction.action.Disable();
+        }
     }
 
     private void Update()
     {
-        if (pauseAction != null && pauseAction.action.WasPressedThisFrame())
-        {
-            Debug.Log("Pause button pressed");
-
-            if (isPaused)
-                ResumeGame();
-            else
-                PauseGame();
-        }
-
-        // editor test key
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            Debug.Log("Escape pressed");
-
             if (isPaused)
                 ResumeGame();
             else
                 PauseGame();
         }
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext context)
+    {
+        if (isPaused)
+            ResumeGame();
+        else
+            PauseGame();
     }
 
     public void PauseGame()
     {
-        Debug.Log("PauseGame called");
         isPaused = true;
 
-        PositionMenu();
+        ShowMenu();
 
-        if (pauseMenuUI != null)
-            pauseMenuUI.SetActive(true);
+        if (mainPage != null) mainPage.SetActive(true);
+        if (controlsPage != null) controlsPage.SetActive(false);
+
+        foreach (MonoBehaviour script in playerScriptsToDisable)
+        {
+            if (script != null)
+                script.enabled = false;
+        }
+
+        foreach (MonoBehaviour script in aiScriptsToDisable)
+        {
+            if (script != null)
+                script.enabled = false;
+        }
+
+        foreach (NavMeshAgent agent in agentsToStop)
+        {
+            if (agent != null)
+                agent.isStopped = true;
+        }
+
+        foreach (Animator anim in animatorsToPause)
+        {
+            if (anim != null)
+                anim.speed = 0f;
+        }
 
         Time.timeScale = 0f;
-
-        if (locomotionScript != null)
-            locomotionScript.enabled = false;
+        AudioListener.pause = true;
     }
 
     public void ResumeGame()
     {
-        Debug.Log("ResumeGame called");
         isPaused = false;
 
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(false);
 
-        Time.timeScale = 1f;
+        foreach (MonoBehaviour script in playerScriptsToDisable)
+        {
+            if (script != null)
+                script.enabled = true;
+        }
 
-        if (locomotionScript != null)
-            locomotionScript.enabled = true;
+        foreach (MonoBehaviour script in aiScriptsToDisable)
+        {
+            if (script != null)
+                script.enabled = true;
+        }
+
+        foreach (NavMeshAgent agent in agentsToStop)
+        {
+            if (agent != null)
+                agent.isStopped = false;
+        }
+
+        foreach (Animator anim in animatorsToPause)
+        {
+            if (anim != null)
+                anim.speed = 1f;
+        }
+
+        AudioListener.pause = false;
+        Time.timeScale = 1f;
     }
 
-    private void PositionMenu()
+    public void OpenControlsPage()
+    {
+        if (mainPage != null) mainPage.SetActive(false);
+        if (controlsPage != null) controlsPage.SetActive(true);
+    }
+
+    public void BackToMainPage()
+    {
+        if (controlsPage != null) controlsPage.SetActive(false);
+        if (mainPage != null) mainPage.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        AudioListener.pause = false;
+        Time.timeScale = 1f;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    public void QuitToMainMenu(string sceneName)
+    {
+        AudioListener.pause = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneName);
+    }
+
+    private void ShowMenu()
     {
         if (pauseMenuUI == null || headTransform == null)
             return;
 
-        Vector3 flatForward = headTransform.forward;
-        flatForward.y = 0f;
-        flatForward.Normalize();
+        pauseMenuUI.SetActive(true);
 
-        if (flatForward.sqrMagnitude < 0.01f)
-            flatForward = Vector3.forward;
+        Vector3 menuPos = headTransform.position + headTransform.forward * distanceFromPlayer;
+        menuPos.y = headTransform.position.y + heightOffset;
+        pauseMenuUI.transform.position = menuPos;
 
-        Vector3 targetPosition = headTransform.position + flatForward * distanceFromPlayer;
-        targetPosition.y = headTransform.position.y + heightOffset;
+        pauseMenuUI.transform.rotation = Quaternion.LookRotation(
+            headTransform.position - pauseMenuUI.transform.position,
+            Vector3.up
+        );
 
-        pauseMenuUI.transform.position = targetPosition;
+        pauseMenuUI.transform.Rotate(0f, 180f, 0f);
 
-        Vector3 toPlayer = headTransform.position - pauseMenuUI.transform.position;
-        toPlayer.y = 0f;
-
-        if (toPlayer.sqrMagnitude > 0.01f)
-            pauseMenuUI.transform.rotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
-
-        pauseMenuUI.transform.Rotate(downwardTilt, 0f, 0f);
     }
 }
