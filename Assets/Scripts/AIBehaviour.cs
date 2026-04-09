@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
@@ -137,6 +138,10 @@ public class AIBehaviour : MonoBehaviour
 
         if (_state != AgentState.Chase && chaseSource.isPlaying) chaseSource.Stop();
 
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) <= 3)
+        {
+            GameManager.Instance.SetGameState(GameManager.GameState.Lost);
+        }
     }
 
     // -1 means all layers
@@ -225,7 +230,7 @@ public class AIBehaviour : MonoBehaviour
 
         Vector3 npcEyes = transform.position + Vector3.up;
         Vector3 playerTarget = Camera.main.transform.position;
-        
+
         Vector3 direction = playerTarget - npcEyes;
         float dist = direction.magnitude;
 
@@ -237,7 +242,7 @@ public class AIBehaviour : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(npcEyes, direction.normalized, out hit, viewDistance))
             {
-               
+
                 bool hitPlayer = hit.transform.CompareTag("PlayerCollider") ||
                                 (hit.transform.parent != null && hit.transform.parent.CompareTag("PlayerCollider"));
 
@@ -246,10 +251,10 @@ public class AIBehaviour : MonoBehaviour
                     playerVisible = true;
                     if (seenPlayerStart == -1) seenPlayerStart = Time.time;
 
-               
+
                     targetPoint = hit.point;
 
-                   
+
                     if (Time.time - seenPlayerStart >= seenPlayerTime)
                     {
                         _state = AgentState.Chase;
@@ -260,7 +265,7 @@ public class AIBehaviour : MonoBehaviour
 
                     if (_state != AgentState.Chase) ActivateLight(seenLight, Lights.Seen);
 
-                    return; 
+                    return;
                 }
             }
         }

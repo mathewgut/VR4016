@@ -29,6 +29,9 @@ public class DuckUIBehaviour : MonoBehaviour
             if(Time.time - timeStart >= timeTarget)
             {
                 alive = false;
+                timeStart = -1;
+
+                Debug.Log("pooap");
                 transform.gameObject.SetActive(false);
             }
         }

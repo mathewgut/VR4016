@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,10 +39,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameState == GameState.Paused || gameState == GameState.Lost) Time.timeScale = 0;
+        if (gameState == GameState.Paused) Time.timeScale = 0;
         else Time.timeScale = 1f;
 
-        if (currCollected == targetCollected && gameState != GameState.Collected) gameState = GameState.Collected;
+        if (gameState == GameState.Won) SceneManager.LoadScene(3);
+        if (gameState == GameState.Lost) SceneManager.LoadScene(4);
+
+        if (currCollected >= targetCollected && gameState != GameState.Collected) gameState = GameState.Collected;
+
+        
     }
 
 

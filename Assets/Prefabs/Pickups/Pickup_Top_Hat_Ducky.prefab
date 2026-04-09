@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
       propertyPath: m_Name
-      value: Top_Hat_Ducky
+      value: Pickup_Top_Hat_Ducky
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -74,6 +74,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3611607837302368454}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4777551175875513099}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7748404802367384680}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5375406580367089973}
   m_SourcePrefab: {fileID: 100100000, guid: 9b3bced53a506974ca5f88d640a24392, type: 3}
 --- !u!1 &3769470802566953947 stripped
 GameObject:
@@ -145,10 +154,34 @@ MonoBehaviour:
       m_Calls: []
   m_HoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7748404802367384680}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_HoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7748404802367384680}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstSelectEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -157,7 +190,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5375406580367089973}
+        m_TargetAssemblyTypeName: DuckyInteraction, Assembly-CSharp
+        m_MethodName: CollectDuck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -259,3 +304,57 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!65 &4777551175875513099
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3769470802566953947}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0062110447, y: 0.007348561, z: 0.0068086353}
+  m_Center: {x: 0.000055904966, y: -0.00076024595, z: -0.0006271717}
+--- !u!114 &7748404802367384680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3769470802566953947}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784d72a2db123df48ad74e61bd2a25da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &5375406580367089973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3769470802566953947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc84223a25c5a64aa3b65acce4f7c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quackSound: {fileID: 8300000, guid: 5f3713dcde31cb24eb10d30ff1af7e60, type: 3}
+  countUI: {fileID: 0}
+  countText: {fileID: 0}

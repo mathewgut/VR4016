@@ -19,7 +19,7 @@ public class ExitDoorBehaviour : MonoBehaviour
 
         if (tick % 10 == 0)
         {
-            if (GameManager.Instance.GetGameState() == GameManager.GameState.Collected) child.gameObject.SetActive(true);
+            if (GameManager.Instance.GetGameState() == GameManager.GameState.Collected || GameManager.Instance.GetGameState() == GameManager.GameState.Won) child.gameObject.SetActive(true);
             else child.gameObject.SetActive(false);
         }
     }

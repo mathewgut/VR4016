@@ -24,6 +24,8 @@ public class ExitBoundary : MonoBehaviour
             {
                 if(IsPointInsideBox(Camera.main.transform.position, coll))
                 {
+
+                    Debug.Log("won!");
                     GameManager.Instance.SetGameState(GameManager.GameState.Won);
                 }
             }

@@ -80,7 +80,7 @@ HingeJoint:
   m_UseSpring: 1
   m_Spring:
     spring: 0.1
-    damper: 50
+    damper: 1000
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []

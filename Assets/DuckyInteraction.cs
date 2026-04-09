@@ -25,9 +25,18 @@ public class DuckyInteraction : MonoBehaviour
         GameManager.Instance.IncrementCollected();
         AudioSource.PlayClipAtPoint(quackSound, transform.position);
         countUI.transform.position = transform.position;
-        countText.text = GameManager.Instance.GetCurrCollected() + "/" + GameManager.Instance.GetToCollect();
 
-        countUI.transform.gameObject.SetActive(true);
+        if(GameManager.Instance.GetCurrCollected() >= 5)
+        {
+            countText.text = GameManager.Instance.GetCurrCollected() + "/" + GameManager.Instance.GetToCollect() + "\n" + "Find the exit!";
+        }
+        else
+        {
+            countText.text = GameManager.Instance.GetCurrCollected() + "/" + GameManager.Instance.GetToCollect();
+        }
+           
+
+        countUI.gameObject.SetActive(true);
 
         Destroy(transform.gameObject);
     }
